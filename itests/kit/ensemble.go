@@ -43,10 +43,10 @@ import (
 	"github.com/filecoin-project/lotus/chain/gen"
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
 	"github.com/filecoin-project/lotus/chain/messagepool"
+	"github.com/filecoin-project/lotus/chain/proofs"
+	proofsmock "github.com/filecoin-project/lotus/chain/proofs/mock"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/verifier"
-	verifiermock "github.com/filecoin-project/lotus/chain/verifier/mock"
 	"github.com/filecoin-project/lotus/chain/wallet/key"
 	"github.com/filecoin-project/lotus/cmd/curio/deps"
 	"github.com/filecoin-project/lotus/cmd/curio/rpc"
@@ -470,7 +470,7 @@ func (n *Ensemble) Start() *Ensemble {
 		// Are we mocking proofs?
 		if n.options.mockProofs {
 			opts = append(opts,
-				node.Override(new(verifier.Verifier), verifiermock.MockVerifier),
+				node.Override(new(proofs.Verifier), proofsmock.MockVerifier),
 				node.Override(new(storiface.Verifier), mock.MockVerifier),
 				node.Override(new(storiface.Prover), mock.MockProver),
 			)
@@ -794,7 +794,7 @@ func (n *Ensemble) Start() *Ensemble {
 				node.Override(new(sectorstorage.Unsealer), node.From(new(*mock.SectorMgr))),
 				node.Override(new(sectorstorage.PieceProvider), node.From(new(*mock.SectorMgr))),
 
-				node.Override(new(verifier.Verifier), verifiermock.MockVerifier),
+				node.Override(new(proofs.Verifier), proofsmock.MockVerifier),
 				node.Override(new(storiface.Verifier), mock.MockVerifier),
 				node.Override(new(storiface.Prover), mock.MockProver),
 				node.Unset(new(*sectorstorage.Manager)),
