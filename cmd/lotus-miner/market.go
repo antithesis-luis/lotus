@@ -314,9 +314,9 @@ var getAskCmd = &cli.Command{
 		}
 
 		w := tabwriter.NewWriter(os.Stdout, 2, 4, 2, ' ', 0)
-		fmt.Fprintf(w, "Price per GiB/Epoch\tVerified\tMin. Piece Size (padded)\tMax. Piece Size (padded)\tExpiry (Epoch)\tExpiry (Appx. Rem. Time)\tSeq. No.\n")
+		_, _ = fmt.Fprintf(w, "Price per GiB/Epoch\tVerified\tMin. Piece Size (padded)\tMax. Piece Size (padded)\tExpiry (Epoch)\tExpiry (Appx. Rem. Time)\tSeq. No.\n")
 		if ask == nil {
-			fmt.Fprintf(w, "<miner does not have an ask>\n")
+			_, _ = fmt.Fprintf(w, "<miner does not have an ask>\n")
 
 			return w.Flush()
 		}
@@ -332,7 +332,17 @@ var getAskCmd = &cli.Command{
 			rem = (time.Second * time.Duration(int64(dlt)*int64(build.BlockDelaySecs))).String()
 		}
 
-		fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%d\t%s\t%d\n", types.FIL(ask.Price), types.FIL(ask.VerifiedPrice), types.SizeStr(types.NewInt(uint64(ask.MinPieceSize))), types.SizeStr(types.NewInt(uint64(ask.MaxPieceSize))), ask.Expiry, rem, ask.SeqNo)
+		_, _ = fmt.Fprintf(
+			w,
+			"%s\t%s\t%s\t%s\t%d\t%s\t%d\n",
+			types.FIL(ask.Price),
+			types.FIL(ask.VerifiedPrice),
+			types.SizeStr(types.NewInt(uint64(ask.MinPieceSize))),
+			types.SizeStr(types.NewInt(uint64(ask.MaxPieceSize))),
+			ask.Expiry,
+			rem,
+			ask.SeqNo,
+		)
 
 		return w.Flush()
 	},
